@@ -153,13 +153,18 @@ export function TranscriptChat({
           {messages.length === 0 ? (
             <ConversationEmptyState
               icon={<MessageCircle className="size-12 text-[#219E82]" />}
-              title="AI Video Assistant"
+              title="Chat with video"
               description="Ask me anything about this video!"
             />
           ) : (
             messages.map((message) => (
               <Message from={message.role} key={message.id}>
-                <MessageContent>
+                <MessageContent
+                  className={
+                    message.role === 'user'
+                      ? '!rounded-2xl !rounded-br-sm !bg-[#14B8A6] px-4 py-3 !text-white shadow-sm'
+                      : '!rounded-2xl !rounded-bl-sm border border-slate-100/50 !bg-white px-4 py-3 !text-slate-700 shadow-lg'
+                  }>
                   {message.parts.map((part, i) => {
                     switch (part.type) {
                       case 'text':
@@ -167,7 +172,7 @@ export function TranscriptChat({
                           <div key={`${message.id}-${i}`}>
                             <MessageResponse>{part.text}</MessageResponse>
                             {message.role === 'assistant' && (
-                              <MessageActions className="mt-2 gap-3 text-slate-400">
+                              <MessageActions className="mt-2 gap-1 text-slate-400">
                                 <MessageAction
                                   tooltip={
                                     playingMessageId === message.id
@@ -178,21 +183,21 @@ export function TranscriptChat({
                                     handleSpeak(message.id, part.text)
                                   }>
                                   {isLoadingAudio === message.id ? (
-                                    <Loader2 className="size-4 animate-spin" />
+                                    <Loader2 className="size-5 animate-spin" />
                                   ) : playingMessageId === message.id ? (
-                                    <StopCircle className="size-4 text-red-500" />
+                                    <StopCircle className="size-5 text-red-500" />
                                   ) : (
-                                    <Volume2 className="size-4" />
+                                    <Volume2 className="size-5 transition-colors hover:text-[#14B8A6]" />
                                   )}
                                 </MessageAction>
-                                <div className="mx-2 h-4 w-px bg-slate-200" />
+                                <div className="h-5 w-px bg-slate-200" />
                                 <MessageAction
                                   tooltip="Helpful"
                                   onClick={() =>
                                     handleReaction(message.id, 'like')
                                   }>
                                   <ThumbsUp
-                                    className={`size-4 ${reactions[message.id] === 'like' ? 'fill-blue-500 text-blue-500' : ''}`}
+                                    className={`size-5 transition-colors ${reactions[message.id] === 'like' ? 'fill-blue-500 text-blue-500' : 'hover:text-blue-500'}`}
                                   />
                                 </MessageAction>
                                 <MessageAction
@@ -201,7 +206,7 @@ export function TranscriptChat({
                                     handleReaction(message.id, 'dislike')
                                   }>
                                   <ThumbsDown
-                                    className={`size-4 ${reactions[message.id] === 'dislike' ? 'fill-red-500 text-red-500' : ''}`}
+                                    className={`size-5 transition-colors ${reactions[message.id] === 'dislike' ? 'fill-red-500 text-red-500' : 'hover:text-red-500'}`}
                                   />
                                 </MessageAction>
                                 <MessageAction
@@ -210,9 +215,9 @@ export function TranscriptChat({
                                     handleCopy(message.id, part.text)
                                   }>
                                   {copiedId === message.id ? (
-                                    <Check className="size-4 text-green-500" />
+                                    <Check className="size-5 text-green-500" />
                                   ) : (
-                                    <Copy className="size-4" />
+                                    <Copy className="size-5 transition-colors hover:text-slate-600" />
                                   )}
                                 </MessageAction>
                               </MessageActions>
@@ -229,10 +234,17 @@ export function TranscriptChat({
           )}
           {status === 'submitted' && (
             <Message from="assistant">
-              <MessageContent>
-                <div className="flex items-center gap-2 text-slate-500">
-                  <Loader2 className="size-4 animate-spin" />
-                  <span>Thinking...</span>
+              <MessageContent className="!rounded-2xl !rounded-bl-sm border border-slate-100/50 !bg-white px-4 py-3 !text-slate-700 shadow-lg">
+                <div className="flex items-center gap-1">
+                  <span
+                    className="inline-block h-2 w-2 animate-bounce rounded-full bg-slate-400"
+                    style={{ animationDelay: '0ms' }}></span>
+                  <span
+                    className="inline-block h-2 w-2 animate-bounce rounded-full bg-slate-400"
+                    style={{ animationDelay: '150ms' }}></span>
+                  <span
+                    className="inline-block h-2 w-2 animate-bounce rounded-full bg-slate-400"
+                    style={{ animationDelay: '300ms' }}></span>
                 </div>
               </MessageContent>
             </Message>

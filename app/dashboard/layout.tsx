@@ -3,7 +3,6 @@
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -14,7 +13,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { LogOut, MessageCircle, PlayCircle } from 'lucide-react';
+import { MessageCircle, PlayCircle } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -68,8 +67,8 @@ export default function DashboardLayout({
                         tooltip={item.title}
                         className={
                           isActive
-                            ? 'bg-[#219E82]/10 font-semibold text-[#219E82] hover:bg-[#219E82]/15'
-                            : 'text-slate-600 hover:bg-slate-100'
+                            ? 'ml-0 rounded-l-none rounded-r-lg border-l-4 border-[#219E82] bg-[#219E82]/15 font-semibold text-[#219E82] transition-all hover:bg-[#219E82]/20'
+                            : 'border-l-4 border-transparent text-slate-600 transition-all hover:bg-slate-100'
                         }>
                         <Link href={item.url}>
                           <item.icon className="size-5" />
@@ -85,7 +84,7 @@ export default function DashboardLayout({
         </SidebarContent>
 
         {/* Footer with Sign Out */}
-        <SidebarFooter className="border-t border-slate-100 p-2">
+        {/* <SidebarFooter className="border-t border-slate-100 p-2">
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
@@ -96,7 +95,7 @@ export default function DashboardLayout({
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
-        </SidebarFooter>
+        </SidebarFooter> */}
       </Sidebar>
 
       {/* Main Content Area */}

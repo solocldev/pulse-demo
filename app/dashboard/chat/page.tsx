@@ -21,8 +21,7 @@ export default async function ChatPage() {
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold tracking-tight">AI Assistant</h1>
         <p className="text-slate-500">
-          Ask questions about the Two Wheeler Loan via the Pulse QA Knowledge
-          Base.
+          Ask questions about the Two Wheeler Loan.
         </p>
       </div>
 

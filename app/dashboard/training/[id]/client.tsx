@@ -235,8 +235,10 @@ export default function VideoPlayerClient({ id }: { id: string }) {
               className={`absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100 ${!isPlaying ? 'opacity-100' : ''}`}>
               {/* Big Play Button (when paused) */}
               {!isPlaying && !currentQuestion && (
-                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
+                <div
+                  className="absolute inset-0 flex cursor-pointer items-center justify-center"
+                  onClick={togglePlay}>
+                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm transition-transform hover:scale-110">
                     <Play size={40} className="ml-2 fill-white text-white" />
                   </div>
                 </div>
@@ -394,7 +396,7 @@ export default function VideoPlayerClient({ id }: { id: string }) {
             <div className="flex shrink-0 items-center justify-between border-b border-slate-100 bg-slate-50/50 p-4">
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
-                <h3 className="font-bold text-slate-700">AI Assistant</h3>
+                <h3 className="font-bold text-slate-700">Chat with video</h3>
               </div>
               <span className="text-xs text-slate-400">
                 Powered by Polymath

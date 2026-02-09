@@ -1,6 +1,13 @@
 'use client';
 
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
   getAllTrainingVideos,
   TrainingVideoType,
 } from '@/lib/services/trainingVideos';
@@ -18,6 +25,19 @@ export default function TrainingPage() {
   const [activeTab, setActiveTab] = useState<'All' | 'Pending' | 'Started'>(
     'All',
   );
+  // Language state
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('All');
+
+  const languages = [
+    'All',
+    'English',
+    'Hindi',
+    'Tamil',
+    'Bangla',
+    'Gujarati',
+    'Kannada',
+  ];
+
   // Local storage persistence
   const [videoStatuses, setVideoStatuses] = useState<
     Record<string, 'Pending' | 'Started' | 'Completed'>
@@ -26,7 +46,7 @@ export default function TrainingPage() {
   useEffect(() => {
     async function fetchVideos() {
       try {
-        const data = await getAllTrainingVideos('Hindi'); // Default lang
+        const data = await getAllTrainingVideos(''); // Fetch all videos
         setVideos(data);
 
         // Load statuses from local storage
@@ -49,6 +69,11 @@ export default function TrainingPage() {
   useEffect(() => {
     let result = videos;
 
+    // Language Filter
+    if (selectedLanguage !== 'All') {
+      result = result.filter((v) => v.language === selectedLanguage);
+    }
+
     // Tab Filter
     if (activeTab !== 'All') {
       result = result.filter((v) => {
@@ -62,7 +87,7 @@ export default function TrainingPage() {
     }
 
     setFilteredVideos(result);
-  }, [videos, activeTab, videoStatuses]);
+  }, [videos, activeTab, selectedLanguage, videoStatuses]);
 
   if (loading) {
     return (
@@ -92,9 +117,23 @@ export default function TrainingPage() {
           <h2 className="text-2xl font-bold text-slate-800">
             Training Library
           </h2>
-          <p className="text-slate-500">
-            Master your craft with our curated video lessons
-          </p>
+        </div>
+
+        {/* Language Filter */}
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium text-slate-600">Language:</span>
+          <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+            <SelectTrigger className="w-[180px] bg-white">
+              <SelectValue placeholder="Select Language" />
+            </SelectTrigger>
+            <SelectContent>
+              {languages.map((lang) => (
+                <SelectItem key={lang} value={lang}>
+                  {lang}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
@@ -147,10 +186,15 @@ export default function TrainingPage() {
                   </div>
 
                   {/* Category Badge */}
-                  <div className="absolute left-3 top-3">
+                  <div className="absolute left-3 top-3 flex gap-2">
                     <span className="rounded-md border border-white/10 bg-black/60 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white backdrop-blur-md">
                       {video.category}
                     </span>
+                    {video.language && (
+                      <span className="rounded-md border border-white/10 bg-[#219E82]/80 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white backdrop-blur-md">
+                        {video.language}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -202,13 +246,18 @@ export default function TrainingPage() {
             No videos found
           </h3>
           <p className="mt-1 max-w-sm text-slate-500">
-            We couldn't find any videos in the "{activeTab}" tab.
+            We couldn't find any videos matching your filters.
           </p>
-          <button
-            onClick={() => setActiveTab('All')}
-            className="mt-6 rounded-lg bg-[#219E82] px-4 py-2 font-medium text-white transition-colors hover:bg-[#1B8A71]">
-            View All Videos
-          </button>
+          <div className="mt-6 flex gap-4">
+            <button
+              onClick={() => {
+                setActiveTab('All');
+                setSelectedLanguage('All');
+              }}
+              className="rounded-lg bg-[#219E82] px-4 py-2 font-medium text-white transition-colors hover:bg-[#1B8A71]">
+              Clear All Filters
+            </button>
+          </div>
         </div>
       )}
     </div>
